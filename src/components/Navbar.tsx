@@ -2,6 +2,7 @@ import React from 'react';
 import type { RoleMode, ThemeMode } from '../types/game';
 import { Sun, Moon, Volume2, VolumeX, Sparkles } from 'lucide-react';
 import { audioService } from '../services/audioService';
+import { SdgWheelLogo } from './SdgWheelLogo';
 
 interface NavbarProps {
   role: RoleMode;
@@ -35,22 +36,20 @@ export const Navbar: React.FC<NavbarProps> = ({
   return (
     <header className="sticky top-0 z-40 w-full border-b border-slate-800/80 light:border-slate-200 bg-slate-950/80 light:bg-white/90 backdrop-blur-md transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-        {/* UN Brand Logo & App Title */}
+        {/* Transparent UN SDG Wheel Ring Logo & Title */}
         <div className="flex items-center space-x-3">
-          <div className="w-9 h-9 rounded-xl bg-unblue flex items-center justify-center text-white font-black text-xs tracking-tighter shadow-md shadow-unblue/30">
-            SDG
-          </div>
+          <SdgWheelLogo className="w-10 h-10 drop-shadow-md" />
           <div className="flex flex-col">
-            <span className="text-base font-black tracking-tight text-white light:text-slate-900 leading-none">
-              ARCADE QUIZ
+            <span className="text-base font-black tracking-tight text-white light:text-slate-900 leading-none font-heading">
+              SDG ARCADE QUIZ
             </span>
-            <span className="text-[10px] font-semibold text-slate-400 light:text-slate-500 flex items-center space-x-1 mt-0.5">
+            <span className="text-[10px] font-bold text-slate-400 light:text-slate-500 flex items-center space-x-1 mt-0.5 uppercase tracking-wider">
               <span>UN Sustainable Development Goals</span>
             </span>
           </div>
         </div>
 
-        {/* Global Controls: Sound & Theme (No role switcher on Player page) */}
+        {/* Global Controls: Sound & Theme */}
         <div className="flex items-center space-x-2 sm:space-x-3">
           {/* QR Join Button for Host Controller ONLY */}
           {role === 'CONTROLLER' && onOpenQrModal && (
