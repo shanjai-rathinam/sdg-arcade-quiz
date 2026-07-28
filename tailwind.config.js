@@ -41,7 +41,8 @@ export default {
       },
       animation: {
         'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-        'bounce-short': 'bounce 0.8s infinite',
+        'bounce-short': 'bounceDown 0.8s ease-in-out infinite',
+        'pop-pulse': 'pulsePop 0.8s ease-in-out infinite',
         'glow-pulse': 'glowPulse 2s ease-in-out infinite',
         'slide-up': 'slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards',
         'scale-in': 'scaleIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards',
@@ -49,6 +50,14 @@ export default {
         'confetti-float': 'float 3s ease-in-out infinite'
       },
       keyframes: {
+        bounceDown: {
+          '0%, 100%': { transform: 'translateY(0)' },
+          '50%': { transform: 'translateY(10px)' },
+        },
+        pulsePop: {
+          '0%, 100%': { transform: 'scale(1)' },
+          '50%': { transform: 'scale(1.15)' },
+        },
         glowPulse: {
           '0%, 100%': { boxShadow: '0 0 15px rgba(0, 145, 185, 0.4)' },
           '50%': { boxShadow: '0 0 30px rgba(0, 145, 185, 0.8)' },
