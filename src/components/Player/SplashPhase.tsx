@@ -30,44 +30,51 @@ export const SplashPhase: React.FC<SplashPhaseProps> = ({ sdg, onFinishSplash })
 
   return (
     <div 
-      className="fixed inset-0 z-50 flex flex-col items-center justify-center p-6 text-white text-center transition-all duration-500 animate-scale-in"
+      className="fixed inset-0 z-50 flex flex-col items-center justify-center p-6 sm:p-10 text-white text-center transition-all duration-500 animate-scale-in overflow-y-auto"
       style={{ backgroundColor: sdg.color }}
     >
-      <div className="relative z-10 max-w-xl mx-auto space-y-6">
+      <div className="relative z-10 max-w-2xl mx-auto space-y-6 sm:space-y-8 my-auto">
         {/* Goal Badge */}
-        <div className="inline-flex items-center space-x-2 px-6 py-2 rounded-full bg-white/20 backdrop-blur-md border border-white/40 text-white font-extrabold text-sm uppercase tracking-widest shadow-xl">
-          <Zap className="w-4 h-4 fill-white animate-bounce" />
+        <div className="inline-flex items-center space-x-2.5 px-6 py-2.5 rounded-full bg-white/20 backdrop-blur-md border-2 border-white/40 text-white font-black text-sm uppercase tracking-widest shadow-xl">
+          <Zap className="w-5 h-5 fill-white animate-bounce" />
           <span>SDG ARCADE QUIZ READY</span>
         </div>
 
         {/* Big SDG Number */}
-        <div className="text-7xl sm:text-9xl font-black tracking-tighter drop-shadow-2xl animate-pulse">
+        <div className="text-7xl sm:text-9xl font-black tracking-tighter drop-shadow-2xl animate-pulse font-heading">
           SDG {sdg.sdgNumber}
         </div>
 
         {/* Vector Icon */}
         <div 
-          className="w-24 h-24 sm:w-32 sm:h-32 mx-auto text-white fill-current drop-shadow-2xl transform hover:scale-110 transition duration-300"
+          className="w-28 h-28 sm:w-36 sm:h-36 mx-auto text-white fill-current drop-shadow-2xl transform hover:scale-110 transition duration-300"
           dangerouslySetInnerHTML={{ __html: sdg.iconSvg }}
         />
 
         {/* Title & Short Description */}
-        <div>
-          <h2 className="text-3xl sm:text-5xl font-black leading-tight drop-shadow-lg">
+        <div className="space-y-3">
+          <h2 className="text-4xl sm:text-6xl font-black leading-tight drop-shadow-lg font-heading">
             {sdg.title}
           </h2>
-          <p className="text-base sm:text-lg font-medium text-white/90 mt-3 max-w-md mx-auto drop-shadow-sm">
+          <p className="text-lg sm:text-2xl font-bold text-white/90 max-w-lg mx-auto drop-shadow-sm leading-relaxed">
             {sdg.shortDesc}
           </p>
         </div>
 
-        {/* Countdown Circle */}
-        <div className="mt-8 pt-4 border-t border-white/20">
-          <div className="text-xs font-extrabold tracking-wider uppercase text-white/80 mb-2">
+        {/* Countdown Section - Shifted down with 3D Depth & Ground Shadow */}
+        <div className="mt-12 sm:mt-16 pt-8 border-t-2 border-white/30 relative">
+          <div className="text-sm sm:text-base font-black tracking-widest uppercase text-white/90 mb-4 font-heading drop-shadow-md">
             QUIZ LAUNCHING IN
           </div>
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-white text-slate-900 font-black text-3xl shadow-2xl animate-bounce-short">
-            {countdown}
+
+          <div className="relative inline-block">
+            {/* 3D Countdown Circle */}
+            <div className="inline-flex items-center justify-center w-20 h-20 sm:w-24 sm:h-24 rounded-3xl bg-gradient-to-b from-white via-slate-100 to-slate-200 text-slate-900 font-black text-4xl sm:text-5xl border-4 border-white shadow-[0_12px_24px_rgba(0,0,0,0.45),0_6px_0px_#cbd5e1] animate-bounce-short font-heading z-10 relative">
+              {countdown}
+            </div>
+
+            {/* 3D Ground Shadow Effect */}
+            <div className="w-24 sm:w-28 h-4 bg-black/40 rounded-full blur-md mx-auto -mt-1 transform scale-y-75 animate-pulse" />
           </div>
         </div>
       </div>
