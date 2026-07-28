@@ -132,70 +132,70 @@ export const QuizPhase: React.FC<QuizPhaseProps> = ({
   }, [currentQuestionIndex, isPaused, handleSelectOption]);
 
   return (
-    <div className="max-w-2xl mx-auto space-y-5 animate-slide-up relative pb-10">
+    <div className="max-w-4xl sm:max-w-5xl mx-auto space-y-6 animate-slide-up relative pb-10">
       {/* Paused Overlay */}
       {isPaused && (
-        <div className="absolute inset-0 z-30 flex flex-col items-center justify-center p-6 bg-slate-950/90 backdrop-blur-md rounded-3xl text-center text-white animate-scale-in">
-          <Pause className="w-16 h-16 text-amber-400 animate-pulse mb-3" />
-          <h3 className="text-2xl font-black text-amber-400 tracking-tight">GAME PAUSED BY OPERATOR</h3>
-          <p className="text-sm text-slate-300 mt-2">Please wait for the host to resume...</p>
+        <div className="absolute inset-0 z-30 flex flex-col items-center justify-center p-8 bg-slate-950/95 backdrop-blur-md rounded-3xl text-center text-white animate-scale-in">
+          <Pause className="w-20 h-20 text-amber-400 animate-pulse mb-4" />
+          <h3 className="text-3xl sm:text-4xl font-black text-amber-400 tracking-tight font-heading">GAME PAUSED BY OPERATOR</h3>
+          <p className="text-lg text-slate-300 mt-3 font-semibold">Please wait for the host to resume...</p>
         </div>
       )}
 
-      {/* Header Bar */}
-      <div className="glass-panel p-4 rounded-2xl border border-slate-700/60 light:border-slate-300 flex items-center justify-between shadow-lg">
+      {/* Header Bar - Monitor Scaled */}
+      <div className="glass-panel p-5 sm:p-6 rounded-3xl border-2 border-slate-700/60 light:border-slate-300 flex items-center justify-between shadow-xl">
         {/* Goal Badge */}
-        <div className="flex items-center space-x-3">
+        <div className="flex items-center space-x-4">
           <div 
-            className="w-10 h-10 rounded-xl flex items-center justify-center text-white font-black text-sm shadow-md shrink-0"
+            className="w-14 h-14 rounded-2xl flex items-center justify-center text-white font-black text-xl shadow-lg shrink-0"
             style={{ backgroundColor: sdg.color }}
           >
             #{sdg.sdgNumber}
           </div>
           <div>
-            <div className="text-[11px] font-extrabold uppercase tracking-wider text-slate-400 light:text-slate-500">
+            <div className="text-xs sm:text-sm font-black uppercase tracking-wider text-slate-400 light:text-slate-500">
               QUESTION {currentQuestionIndex + 1} OF 5
             </div>
-            <div className="text-sm font-extrabold text-white light:text-slate-900 line-clamp-1">
+            <div className="text-lg sm:text-2xl font-black text-white light:text-slate-900 font-heading line-clamp-1">
               {sdg.title}
             </div>
           </div>
         </div>
 
         {/* Live Score Counter */}
-        <div className="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-400 font-black text-sm">
-          <Trophy className="w-4 h-4" />
+        <div className="flex items-center space-x-2 px-5 py-2.5 rounded-2xl bg-amber-500/10 border-2 border-amber-500/40 text-amber-400 font-black text-lg sm:text-2xl shadow-md">
+          <Trophy className="w-6 h-6" />
           <span>{score} pts</span>
         </div>
       </div>
 
       {/* Timer Bar */}
-      <div className="glass-panel p-3 rounded-2xl border border-slate-700/60 light:border-slate-300 shadow-md">
+      <div className="glass-panel p-4 rounded-2xl border-2 border-slate-700/60 light:border-slate-300 shadow-md">
         <TimerBar timeRemaining={timeRemaining} totalTime={15} color={sdg.color} />
       </div>
 
-      {/* Main Question Card */}
+      {/* Main Question Card - Monitor & Landscape Scaled */}
       <div 
-        className="glass-panel p-6 sm:p-8 rounded-3xl border-2 shadow-2xl space-y-6 relative overflow-hidden transition-all"
+        className="glass-panel p-8 sm:p-12 rounded-3xl border-3 shadow-2xl space-y-8 relative overflow-hidden transition-all"
         style={{ borderColor: `${sdg.color}66` }}
       >
-        <div className="flex items-start justify-between gap-3">
-          <h3 className="text-lg sm:text-2xl font-black text-white light:text-slate-900 leading-snug tracking-tight">
+        <div className="flex items-start justify-between gap-4">
+          <h3 className="text-2xl sm:text-4xl font-black text-white light:text-slate-900 leading-snug tracking-tight font-heading">
             {currentQuestion.question}
           </h3>
         </div>
 
-        {/* Option Choice Buttons */}
-        <div className="grid grid-cols-1 gap-3">
+        {/* Option Choice Buttons - Landscape Grid Optimization */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
           {currentQuestion.options.map((opt, idx) => {
             const isSelected = selectedOption === idx;
             const isCorrectOption = idx === currentQuestion.answerIndex;
 
-            let buttonStyle = 'bg-slate-950/70 light:bg-white border-slate-800 light:border-slate-300 text-slate-200 light:text-slate-800 hover:border-unblue';
+            let buttonStyle = 'bg-slate-950/70 light:bg-white border-slate-800 light:border-slate-300 text-slate-100 light:text-slate-900 hover:border-unblue';
             
             if (isAnswered) {
               if (isCorrectOption) {
-                buttonStyle = 'bg-emerald-500/20 border-emerald-500 text-emerald-300 shadow-lg shadow-emerald-500/20 ring-2 ring-emerald-500';
+                buttonStyle = 'bg-emerald-500/20 border-emerald-500 text-emerald-300 shadow-xl shadow-emerald-500/20 ring-4 ring-emerald-500';
               } else if (isSelected && !isCorrectOption) {
                 buttonStyle = 'bg-rose-500/20 border-rose-500 text-rose-300 animate-shake';
               } else {
@@ -209,20 +209,20 @@ export const QuizPhase: React.FC<QuizPhaseProps> = ({
                 type="button"
                 onClick={() => handleSelectOption(idx)}
                 disabled={isAnswered || isPaused}
-                className={`w-full text-left p-4 sm:p-5 rounded-2xl border-2 font-bold text-sm sm:text-base transition-all duration-200 flex items-center justify-between space-x-3 shadow-md transform active:scale-98 ${buttonStyle}`}
+                className={`w-full text-left p-6 sm:p-7 rounded-2xl border-3 font-extrabold text-base sm:text-xl transition-all duration-200 flex items-center justify-between space-x-4 shadow-lg transform active:scale-98 ${buttonStyle}`}
               >
-                <div className="flex items-center space-x-3">
-                  <span className="inline-flex items-center justify-center h-8 w-8 rounded-xl bg-slate-800 light:bg-slate-200 text-slate-300 light:text-slate-700 text-xs font-black shrink-0">
+                <div className="flex items-start space-x-4">
+                  <span className="inline-flex items-center justify-center h-10 w-10 sm:h-11 sm:w-11 rounded-xl bg-slate-800 light:bg-slate-200 text-slate-200 light:text-slate-800 text-base sm:text-lg font-black shrink-0">
                     {String.fromCharCode(65 + idx)}
                   </span>
-                  <span>{opt}</span>
+                  <span className="leading-snug pt-1">{opt}</span>
                 </div>
 
                 {isAnswered && isCorrectOption && (
-                  <CheckCircle className="w-6 h-6 text-emerald-400 shrink-0" />
+                  <CheckCircle className="w-8 h-8 text-emerald-400 shrink-0" />
                 )}
                 {isAnswered && isSelected && !isCorrectOption && (
-                  <XCircle className="w-6 h-6 text-rose-400 shrink-0" />
+                  <XCircle className="w-8 h-8 text-rose-400 shrink-0" />
                 )}
               </button>
             );
@@ -231,15 +231,15 @@ export const QuizPhase: React.FC<QuizPhaseProps> = ({
 
         {/* 5-Second Window Fast Fact & Countdown Card */}
         {isAnswered && (
-          <div className="pt-4 border-t border-slate-700/60 light:border-slate-200 animate-scale-in space-y-3">
-            <div className="flex items-center justify-between">
-              <span className={`text-xs font-black uppercase tracking-wider flex items-center space-x-1 ${pointsEarned && pointsEarned > 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
+          <div className="pt-6 border-t-2 border-slate-700/60 light:border-slate-200 animate-scale-in space-y-4">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <span className={`text-sm sm:text-base font-black uppercase tracking-wider flex items-center space-x-2 ${pointsEarned && pointsEarned > 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
                 <span>{pointsEarned && pointsEarned > 0 ? `+${pointsEarned} POINTS EARNED!` : '0 POINTS'}</span>
               </span>
               
               {/* 5s Window Timer Indicator */}
-              <span className="text-xs font-extrabold text-amber-400 flex items-center space-x-1 animate-pulse">
-                <Clock className="w-3.5 h-3.5 text-amber-400" />
+              <span className="text-sm sm:text-lg font-black text-amber-400 flex items-center space-x-2 animate-pulse">
+                <Clock className="w-5 h-5 text-amber-400" />
                 <span>
                   {isFinalQuestion
                     ? `Exiting to Results Lobby in ${transitionCountdown ?? 5}s...`
@@ -248,13 +248,13 @@ export const QuizPhase: React.FC<QuizPhaseProps> = ({
               </span>
             </div>
 
-            {/* Fact Box */}
-            <div className="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-amber-200 text-xs sm:text-sm font-medium space-y-1 shadow-md">
-              <div className="font-extrabold uppercase text-amber-400 text-xs tracking-wider flex items-center space-x-1.5">
-                <Lightbulb className="w-4 h-4 text-amber-400" />
+            {/* Fact Box - Monitor Scaled */}
+            <div className="p-6 rounded-3xl bg-amber-500/10 border-2 border-amber-500/30 text-amber-200 text-base sm:text-xl font-medium space-y-2 shadow-lg">
+              <div className="font-black uppercase text-amber-400 text-sm sm:text-base tracking-wider flex items-center space-x-2 font-heading">
+                <Lightbulb className="w-5 h-5 text-amber-400" />
                 <span>DID YOU KNOW?</span>
               </div>
-              <p className="leading-relaxed text-slate-200 light:text-slate-800 font-semibold">
+              <p className="leading-relaxed text-slate-100 light:text-slate-900 font-bold">
                 {currentQuestion.explanation}
               </p>
             </div>

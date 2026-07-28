@@ -94,77 +94,77 @@ export const SummaryPhase: React.FC<SummaryPhaseProps> = ({
   const rank = getRankBadge(correctCount);
 
   return (
-    <div className="max-w-2xl mx-auto space-y-6 text-center animate-slide-up pb-10">
+    <div className="max-w-4xl mx-auto space-y-8 text-center animate-slide-up pb-10 pt-4">
       {/* Trigger Festive Confetti Blast for 3+ correct answers */}
       {correctCount >= 3 && <ConfettiEffect trigger={true} />}
 
       {/* Hero Badge */}
-      <div className="inline-flex items-center space-x-2 px-5 py-2 rounded-full bg-gradient-to-r from-amber-500/20 to-yellow-500/20 border border-amber-500/40 text-amber-300 light:text-amber-700 font-black text-xs uppercase tracking-widest shadow-lg animate-pulse">
-        <Sparkles className="w-4 h-4 text-amber-400" />
+      <div className="inline-flex items-center space-x-3 px-6 py-2.5 rounded-full bg-gradient-to-r from-amber-500/20 to-yellow-500/20 border-2 border-amber-500/40 text-amber-300 light:text-amber-700 font-black text-sm uppercase tracking-widest shadow-xl animate-pulse">
+        <Sparkles className="w-5 h-5 text-amber-400" />
         <span>ARCADE QUIZ RESULTS</span>
       </div>
 
-      {/* Main Rank Title */}
+      {/* Main Rank Title - Monitor Scaled */}
       <div>
-        <h2 className="text-3xl sm:text-5xl font-black text-white light:text-slate-900 tracking-tight drop-shadow-md">
+        <h2 className="text-4xl sm:text-6xl font-black text-white light:text-slate-900 tracking-tight drop-shadow-md font-heading">
           {playerState.playerName || 'Eco Player'}
         </h2>
-        <p className="text-sm text-slate-400 light:text-slate-600 mt-1">
+        <p className="text-base sm:text-xl font-bold text-slate-300 light:text-slate-600 mt-2">
           Completed Goal #{sdg?.sdgNumber}: {sdg?.title}
         </p>
       </div>
 
-      {/* Rank Badge Card */}
-      <div className={`glass-panel p-6 sm:p-8 rounded-3xl border-2 ${rank.borderColor} ${rank.glowClass} shadow-2xl space-y-4 relative overflow-hidden`}>
-        <div className="text-6xl sm:text-7xl mb-2 animate-bounce-short">
+      {/* Rank Badge Card - Scaled for Landscape Monitors */}
+      <div className={`glass-panel p-8 sm:p-12 rounded-3xl border-3 ${rank.borderColor} ${rank.glowClass} shadow-2xl space-y-6 relative overflow-hidden`}>
+        <div className="text-7xl sm:text-9xl mb-3 animate-bounce-short">
           {rank.icon}
         </div>
 
         <div>
-          <div className="text-xs font-black uppercase tracking-widest text-slate-400 light:text-slate-500 mb-1">
+          <div className="text-xs sm:text-sm font-black uppercase tracking-widest text-slate-400 light:text-slate-500 mb-2">
             EARNED ARCADE TIER
           </div>
-          <div className={`inline-block px-5 py-2 rounded-full bg-gradient-to-r ${rank.color} text-white font-black text-sm sm:text-base tracking-wider uppercase shadow-xl`}>
+          <div className={`inline-block px-6 py-3 rounded-full bg-gradient-to-r ${rank.color} text-white font-black text-base sm:text-2xl tracking-wider uppercase shadow-2xl font-heading`}>
             {rank.rankName} - {rank.title}
           </div>
         </div>
 
-        <p className="text-sm font-bold text-slate-300 light:text-slate-700 max-w-md mx-auto leading-relaxed">
+        <p className="text-base sm:text-xl font-extrabold text-slate-200 light:text-slate-800 max-w-2xl mx-auto leading-relaxed">
           {rank.desc}
         </p>
       </div>
 
-      {/* Score Summary Metrics */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+      {/* Score Summary Metrics Grid - Monitor Scaled */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         {/* Total Score */}
-        <div className="glass-panel p-4 rounded-2xl border border-slate-700/60 light:border-slate-300">
-          <div className="text-xs font-bold text-slate-400 light:text-slate-500 flex items-center justify-center space-x-1">
-            <Trophy className="w-4 h-4 text-amber-400" />
+        <div className="glass-panel p-6 rounded-3xl border-2 border-slate-700/60 light:border-slate-300">
+          <div className="text-xs sm:text-sm font-black text-slate-400 light:text-slate-500 flex items-center justify-center space-x-2 uppercase tracking-wider">
+            <Trophy className="w-5 h-5 text-amber-400" />
             <span>Final Score</span>
           </div>
-          <div className="text-2xl sm:text-3xl font-black text-amber-400 light:text-amber-600 mt-1">
-            {playerState.score} <span className="text-xs font-normal text-slate-400 light:text-slate-600">pts</span>
+          <div className="text-3xl sm:text-5xl font-black text-amber-400 light:text-amber-600 mt-2 font-heading">
+            {playerState.score} <span className="text-sm font-bold text-slate-400 light:text-slate-600">pts</span>
           </div>
         </div>
 
         {/* Accuracy */}
-        <div className="glass-panel p-4 rounded-2xl border border-slate-700/60 light:border-slate-300">
-          <div className="text-xs font-bold text-slate-400 light:text-slate-500 flex items-center justify-center space-x-1">
-            <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+        <div className="glass-panel p-6 rounded-3xl border-2 border-slate-700/60 light:border-slate-300">
+          <div className="text-xs sm:text-sm font-black text-slate-400 light:text-slate-500 flex items-center justify-center space-x-2 uppercase tracking-wider">
+            <CheckCircle2 className="w-5 h-5 text-emerald-400" />
             <span>Correct Answers</span>
           </div>
-          <div className="text-2xl sm:text-3xl font-black text-emerald-400 light:text-emerald-600 mt-1">
-            {correctCount}/{totalQuestions} <span className="text-xs font-normal text-slate-400 light:text-slate-600">({accuracyPct}%)</span>
+          <div className="text-3xl sm:text-5xl font-black text-emerald-400 light:text-emerald-600 mt-2 font-heading">
+            {correctCount}/{totalQuestions} <span className="text-sm font-bold text-slate-400 light:text-slate-600">({accuracyPct}%)</span>
           </div>
         </div>
 
         {/* SDG Unlocked */}
-        <div className="glass-panel p-4 rounded-2xl border border-slate-700/60 light:border-slate-300 col-span-2 sm:col-span-1">
-          <div className="text-xs font-bold text-slate-400 light:text-slate-500 flex items-center justify-center space-x-1">
-            <Award className="w-4 h-4 text-unblue" />
+        <div className="glass-panel p-6 rounded-3xl border-2 border-slate-700/60 light:border-slate-300">
+          <div className="text-xs sm:text-sm font-black text-slate-400 light:text-slate-500 flex items-center justify-center space-x-2 uppercase tracking-wider">
+            <Award className="w-5 h-5 text-unblue" />
             <span>Badge Unlocked</span>
           </div>
-          <div className="text-sm font-black text-white light:text-slate-900 mt-2 truncate" style={{ color: sdg?.color }}>
+          <div className="text-base sm:text-xl font-black text-white light:text-slate-900 mt-3 truncate font-heading" style={{ color: sdg?.color }}>
             SDG #{sdg?.sdgNumber} Master
           </div>
         </div>
