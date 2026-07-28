@@ -24,7 +24,7 @@ export const QuizPhase: React.FC<QuizPhaseProps> = ({
   onQuizCompleted
 }) => {
   const currentQuestion: SDGQuestion = sdg.questions[currentQuestionIndex] || sdg.questions[0];
-  const isFinalQuestion = currentQuestionIndex === (sdg.questions.length - 1);
+  const isFinalQuestion = currentQuestionIndex >= (sdg.questions.length - 1);
 
   const [timeRemaining, setTimeRemaining] = useState(15);
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
@@ -242,7 +242,7 @@ export const QuizPhase: React.FC<QuizPhaseProps> = ({
                 <Clock className="w-3.5 h-3.5 text-amber-400" />
                 <span>
                   {isFinalQuestion
-                    ? `Entering Results Lobby in ${transitionCountdown ?? 5}s...`
+                    ? `Exiting to Results Lobby in ${transitionCountdown ?? 5}s...`
                     : `Next question in ${transitionCountdown ?? 5}s...`}
                 </span>
               </span>
