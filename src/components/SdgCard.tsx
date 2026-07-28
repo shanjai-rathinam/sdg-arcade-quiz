@@ -10,7 +10,7 @@ interface SdgCardProps {
   disabled?: boolean;
 }
 
-export const SdgCard: React.FC<SdgCardProps> = ({
+export const SdgCard: React.FC<SdgCardProps> = React.memo(({
   sdg,
   isSelected = false,
   onSelect,
@@ -68,4 +68,6 @@ export const SdgCard: React.FC<SdgCardProps> = ({
       <div className="absolute inset-0 bg-gradient-to-tr from-black/20 via-transparent to-white/20 pointer-events-none" />
     </button>
   );
-};
+});
+
+SdgCard.displayName = 'SdgCard';

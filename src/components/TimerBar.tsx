@@ -6,10 +6,10 @@ interface TimerBarProps {
   color?: string;
 }
 
-export const TimerBar: React.FC<TimerBarProps> = ({
+export const TimerBar: React.FC<TimerBarProps> = React.memo(({
   timeRemaining,
   totalTime = 15,
-  color = '#009EDB'
+  color = '#0091b9'
 }) => {
   const percentage = Math.max(0, Math.min(100, (timeRemaining / totalTime) * 100));
 
@@ -23,17 +23,17 @@ export const TimerBar: React.FC<TimerBarProps> = ({
 
   return (
     <div className="w-full">
-      <div className="flex items-center justify-between text-xs font-extrabold text-slate-300 light:text-slate-700 mb-1.5 px-1">
-        <span className="flex items-center space-x-1 uppercase tracking-wider">
-          <span>⏱️ Time Remaining</span>
+      <div className="flex items-center justify-between text-xs sm:text-sm font-black text-slate-300 light:text-slate-700 mb-2 px-1">
+        <span className="flex items-center space-x-1.5 uppercase tracking-wider font-heading">
+          <span>⏱️ TIME REMAINING</span>
         </span>
-        <span className={`text-sm font-mono font-black ${timeRemaining <= 4 ? 'text-rose-400 animate-bounce' : ''}`}>
+        <span className={`text-base sm:text-lg font-mono font-black ${timeRemaining <= 4 ? 'text-rose-400 animate-pulse' : ''}`}>
           {timeRemaining}s
         </span>
       </div>
 
       {/* Progress Track */}
-      <div className="w-full h-3 bg-slate-950/80 light:bg-slate-200 rounded-full p-0.5 border border-slate-800 light:border-slate-300 overflow-hidden shadow-inner">
+      <div className="w-full h-4 bg-slate-950/80 light:bg-slate-200 rounded-full p-0.5 border border-slate-800 light:border-slate-300 overflow-hidden shadow-inner">
         <div
           className={`h-full rounded-full transition-all duration-300 ease-linear shadow-lg ${barColorClass}`}
           style={{
@@ -44,4 +44,6 @@ export const TimerBar: React.FC<TimerBarProps> = ({
       </div>
     </div>
   );
-};
+});
+
+TimerBar.displayName = 'TimerBar';
