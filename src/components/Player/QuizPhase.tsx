@@ -24,6 +24,7 @@ export const QuizPhase: React.FC<QuizPhaseProps> = ({
   onQuizCompleted
 }) => {
   const currentQuestion: SDGQuestion = sdg.questions[currentQuestionIndex] || sdg.questions[0];
+  const isFinalQuestion = currentQuestionIndex === (sdg.questions.length - 1);
 
   const [timeRemaining, setTimeRemaining] = useState(15);
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
@@ -72,7 +73,7 @@ export const QuizPhase: React.FC<QuizPhaseProps> = ({
 
     onAnswerSubmitted(record);
 
-    // Start 5-Second Window Timer before progressing to next question
+    // Start 5-Second Window Timer before progressing
     setTransitionCountdown(5);
 
     if (transitionRef.current) clearInterval(transitionRef.current);
@@ -238,8 +239,12 @@ export const QuizPhase: React.FC<QuizPhaseProps> = ({
               
               {/* 5s Window Timer Indicator */}
               <span className="text-xs font-extrabold text-amber-400 flex items-center space-x-1 animate-pulse">
-                <Clock className="w-3.5 h-3.5" />
-                <span>Next question in {transitionCountdown ?? 5}s...</span>
+                <Clock className="w-3.5 h-3.5 text-amber-400" />
+                <span>
+                  {isFinalQuestion
+                    ? `Entering Results Lobby in ${transitionCountdown ?? 5}s...`
+                    : `Next question in ${transitionCountdown ?? 5}s...`}
+                </span>
               </span>
             </div>
 
