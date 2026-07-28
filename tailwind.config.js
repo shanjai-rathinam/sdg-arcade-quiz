@@ -8,7 +8,10 @@ export default {
   theme: {
     extend: {
       colors: {
-        unblue: '#009EDB',
+        unblue: '#0091b9',
+        unprimary: '#00adef',
+        undark: '#212529',
+        unlight: '#f8f9fa',
         arcadeDark: '#090D16',
         arcadeCard: 'rgba(15, 23, 42, 0.75)',
         sdg: {
@@ -32,7 +35,8 @@ export default {
         }
       },
       fontFamily: {
-        sans: ['Inter', 'Outfit', 'system-ui', 'sans-serif'],
+        sans: ['Roboto', 'Oswald', 'system-ui', 'sans-serif'],
+        heading: ['Oswald', 'Roboto', 'sans-serif'],
         arcade: ['"Press Start 2P"', 'monospace', 'cursive']
       },
       animation: {
@@ -46,8 +50,8 @@ export default {
       },
       keyframes: {
         glowPulse: {
-          '0%, 100%': { boxShadow: '0 0 15px rgba(0, 158, 219, 0.4)' },
-          '50%': { boxShadow: '0 0 30px rgba(0, 158, 219, 0.8)' },
+          '0%, 100%': { boxShadow: '0 0 15px rgba(0, 145, 185, 0.4)' },
+          '50%': { boxShadow: '0 0 30px rgba(0, 145, 185, 0.8)' },
         },
         slideUp: {
           '0%': { opacity: '0', transform: 'translateY(20px)' },

@@ -2,30 +2,51 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --un-blue: #0091b9;
+  --un-primary: #00adef;
+  --un-dark: #212529;
+  --un-body-text: #3b3b3b;
+  --un-light-bg: #ffffff;
+  --un-card-bg: #f8f9fa;
+  --un-border: #e9ecef;
+  --font-family-sans: "Roboto", "Oswald", sans-serif;
+}
+
 @layer base {
   body {
-    @apply font-sans antialiased selection:bg-unblue selection:text-white transition-colors duration-300;
+    font-family: var(--font-family-sans);
+    @apply antialiased selection:bg-unblue selection:text-white transition-colors duration-300;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: "Oswald", "Roboto", sans-serif;
   }
 }
 
-/* Custom Glassmorphic Panels */
+/* Official UN Design System Glassmorphic Panels */
 .glass-panel {
   background: rgba(15, 23, 42, 0.75);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
 }
 
-.light .glass-panel {
-  background: rgba(255, 255, 255, 0.92);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border-color: rgba(226, 232, 240, 1);
-  box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.06);
+.light {
+  background-color: var(--un-light-bg);
+  color: var(--un-dark);
 }
 
-/* Arcade Glow Effects */
+.light .glass-panel {
+  background: #ffffff;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-color: var(--un-border);
+  box-shadow: 0 4px 16px -2px rgba(33, 37, 41, 0.08);
+}
+
+/* UN Brand Accent Glow */
 .arcade-glow {
-  box-shadow: 0 0 25px -5px rgba(0, 158, 219, 0.4);
+  box-shadow: 0 0 25px -5px rgba(0, 145, 185, 0.4);
 }
 
 .arcade-glow-gold {
@@ -43,7 +64,7 @@
 }
 
 .light ::-webkit-scrollbar-track {
-  background: rgba(241, 245, 249, 1);
+  background: #f8f9fa;
 }
 
 ::-webkit-scrollbar-thumb {
@@ -52,9 +73,9 @@
 }
 
 .light ::-webkit-scrollbar-thumb {
-  background: rgba(148, 163, 184, 0.8);
+  background: #ced4da;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #009EDB;
+  background: #0091b9;
 }
