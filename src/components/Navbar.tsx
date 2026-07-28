@@ -1,6 +1,6 @@
 import React from 'react';
 import type { RoleMode, ThemeMode } from '../types/game';
-import { Sun, Moon, Volume2, VolumeX, Sparkles } from 'lucide-react';
+import { Sun, Moon, Volume2, VolumeX, Sparkles, Sliders, Smartphone } from 'lucide-react';
 import { audioService } from '../services/audioService';
 
 interface NavbarProps {
@@ -50,8 +50,29 @@ export const Navbar: React.FC<NavbarProps> = ({
           </div>
         </div>
 
-        {/* Global Controls: Sound, Theme, QR Link (Controller only) */}
+        {/* Global Controls: Sound, Theme, View Switcher, QR Link */}
         <div className="flex items-center space-x-2 sm:space-x-3">
+          {/* Quick View Switcher Button */}
+          {role === 'PLAYER' ? (
+            <a
+              href="?role=controller"
+              className="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-unblue/20 hover:bg-unblue/30 text-unblue light:bg-unblue/10 border border-unblue/30 font-bold text-xs shadow-sm transition"
+              title="Switch to Host Controller Dashboard"
+            >
+              <Sliders className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">Host Controller</span>
+            </a>
+          ) : (
+            <a
+              href="?role=player"
+              className="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-400 light:bg-emerald-500/10 border border-emerald-500/30 font-bold text-xs shadow-sm transition"
+              title="Switch to Player Client View"
+            >
+              <Smartphone className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">Player View</span>
+            </a>
+          )}
+
           {/* QR Join Button for Host Controller */}
           {role === 'CONTROLLER' && onOpenQrModal && (
             <button
