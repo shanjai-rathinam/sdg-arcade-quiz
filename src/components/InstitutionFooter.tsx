@@ -2,17 +2,19 @@ import React from 'react';
 
 export const InstitutionFooter: React.FC = () => {
   return (
-    <footer className="mt-12 py-6 border-t border-slate-800/60 light:border-slate-200 text-center opacity-80 hover:opacity-100 transition-opacity">
-      <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs font-semibold text-slate-400 light:text-slate-600">
-        <div className="flex items-center space-x-2">
-          <span>Hosted & Organized by</span>
+    <footer className="mt-12 py-8 border-t-2 border-slate-800/80 light:border-slate-200 text-center bg-slate-950/40 light:bg-slate-100/60 backdrop-blur-sm">
+      <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-4 text-sm font-bold text-slate-300 light:text-slate-700">
+        <div className="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-4">
+          <span className="uppercase tracking-wider text-xs font-black text-slate-400 light:text-slate-500 font-heading">
+            HOSTED & ORGANIZED BY:
+          </span>
           <img
             src="./srm-trp-logo.jpg"
             alt="SRM TRP Engineering College, Trichy"
-            className="h-7 sm:h-8 object-contain rounded bg-white p-1 shadow-sm border border-slate-200"
+            className="h-16 sm:h-20 md:h-24 max-w-full object-contain rounded-2xl bg-white p-2 shadow-lg border-2 border-slate-200 transition-transform duration-300 hover:scale-105"
           />
         </div>
-        <span className="text-[11px] text-slate-500 light:text-slate-400">
+        <span className="text-xs font-extrabold text-slate-400 light:text-slate-500 uppercase tracking-widest font-heading">
           SDG Arcade Quiz • Live Booth Interactive System
         </span>
       </div>
