@@ -5,6 +5,7 @@ import { Navbar } from './components/Navbar';
 import { QrModal } from './components/QrModal';
 import { ControllerView } from './components/Controller/ControllerView';
 import { PlayerView } from './components/Player/PlayerView';
+import { InstitutionFooter } from './components/InstitutionFooter';
 
 export function App() {
   // Determine role based on URL path (/controller vs /player) or query parameter (?role=controller)
@@ -262,41 +263,46 @@ export function App() {
   }, []);
 
   return (
-    <div className={`min-h-screen transition-colors duration-300 ${theme === 'DARK' ? 'bg-arcadeDark text-slate-100' : 'bg-slate-50 text-slate-900'}`}>
-      {/* Top Navbar */}
-      <Navbar
-        role={role}
-        theme={theme}
-        setTheme={setTheme}
-        isMuted={isMuted}
-        setIsMuted={setIsMuted}
-        onOpenQrModal={() => setIsQrModalOpen(true)}
-        isConnected={isConnected}
-      />
+    <div className={`min-h-screen flex flex-col justify-between transition-colors duration-300 ${theme === 'DARK' ? 'bg-arcadeDark text-slate-100' : 'bg-slate-50 text-slate-900'}`}>
+      <div>
+        {/* Top Navbar */}
+        <Navbar
+          role={role}
+          theme={theme}
+          setTheme={setTheme}
+          isMuted={isMuted}
+          setIsMuted={setIsMuted}
+          onOpenQrModal={() => setIsQrModalOpen(true)}
+          isConnected={isConnected}
+        />
 
-      {/* Main Container */}
-      <main className="p-4 sm:p-6 md:p-8 max-w-7xl mx-auto">
-        {role === 'CONTROLLER' ? (
-          <ControllerView
-            selectedSdgNum={selectedSdgNum}
-            onSelectSdg={handleSelectSdg}
-            playerState={playerState}
-            onTriggerStart={handleTriggerStart}
-            onTogglePause={handleTogglePause}
-            onResetQuiz={handleResetQuiz}
-            onResetSession={handleResetSession}
-          />
-        ) : (
-          <PlayerView
-            playerState={playerState}
-            onNameSubmitted={handleNameSubmitted}
-            onFinishSplash={handleFinishSplash}
-            onAnswerSubmitted={handleAnswerSubmitted}
-            onNextQuestion={handleNextQuestion}
-            onQuizCompleted={handleQuizCompleted}
-          />
-        )}
-      </main>
+        {/* Main Container */}
+        <main className="p-4 sm:p-6 md:p-8 max-w-7xl mx-auto">
+          {role === 'CONTROLLER' ? (
+            <ControllerView
+              selectedSdgNum={selectedSdgNum}
+              onSelectSdg={handleSelectSdg}
+              playerState={playerState}
+              onTriggerStart={handleTriggerStart}
+              onTogglePause={handleTogglePause}
+              onResetQuiz={handleResetQuiz}
+              onResetSession={handleResetSession}
+            />
+          ) : (
+            <PlayerView
+              playerState={playerState}
+              onNameSubmitted={handleNameSubmitted}
+              onFinishSplash={handleFinishSplash}
+              onAnswerSubmitted={handleAnswerSubmitted}
+              onNextQuestion={handleNextQuestion}
+              onQuizCompleted={handleQuizCompleted}
+            />
+          )}
+        </main>
+      </div>
+
+      {/* Subtle Non-Disruptive Institution Footer */}
+      <InstitutionFooter />
 
       {/* QR Code Join Modal (Controller view only) */}
       {role === 'CONTROLLER' && (

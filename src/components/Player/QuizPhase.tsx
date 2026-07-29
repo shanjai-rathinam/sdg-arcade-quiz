@@ -26,13 +26,14 @@ export const QuizPhase: React.FC<QuizPhaseProps> = ({
   const currentQuestion: SDGQuestion = sdg.questions[currentQuestionIndex] || sdg.questions[0];
   const isFinalQuestion = currentQuestionIndex >= (sdg.questions.length - 1);
 
-  const [timeRemaining, setTimeRemaining] = useState(15);
+  // 30-Second Question Duration for deep reading
+  const [timeRemaining, setTimeRemaining] = useState(30);
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
   const [isAnswered, setIsAnswered] = useState(false);
   const [pointsEarned, setPointsEarned] = useState<number | null>(null);
   const [transitionCountdown, setTransitionCountdown] = useState<number | null>(null);
 
-  const timeRemainingRef = useRef(15);
+  const timeRemainingRef = useRef(30);
   const isAnsweredRef = useRef(false);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const transitionRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -54,7 +55,7 @@ export const QuizPhase: React.FC<QuizPhaseProps> = ({
 
     const isCorrect = optionIdx === currentQuestion.answerIndex;
     const remTime = timeRemainingRef.current;
-    const earned = isCorrect ? 100 + (remTime * 10) : 0;
+    const earned = isCorrect ? 100 + (remTime * 5) : 0;
     setPointsEarned(earned);
 
     if (isCorrect) {
@@ -96,15 +97,15 @@ export const QuizPhase: React.FC<QuizPhaseProps> = ({
     }, 1000);
   }, [isPaused, currentQuestion, onAnswerSubmitted, currentQuestionIndex, sdg.questions.length, onQuizCompleted, onNextQuestion]);
 
-  // 15-second Question Countdown Timer
+  // 30-second Question Countdown Timer
   useEffect(() => {
     isAnsweredRef.current = false;
     setIsAnswered(false);
     setSelectedOption(null);
     setPointsEarned(null);
     setTransitionCountdown(null);
-    setTimeRemaining(15);
-    timeRemainingRef.current = 15;
+    setTimeRemaining(30);
+    timeRemainingRef.current = 30;
 
     if (timerRef.current) clearInterval(timerRef.current);
     if (transitionRef.current) clearInterval(transitionRef.current);
@@ -142,7 +143,7 @@ export const QuizPhase: React.FC<QuizPhaseProps> = ({
         </div>
       )}
 
-      {/* Header Bar - Monitor Scaled */}
+      {/* Header Bar */}
       <div className="glass-panel p-5 sm:p-6 rounded-3xl border-2 border-slate-700/60 light:border-slate-300 flex items-center justify-between shadow-xl">
         {/* Goal Badge */}
         <div className="flex items-center space-x-4">
@@ -169,12 +170,12 @@ export const QuizPhase: React.FC<QuizPhaseProps> = ({
         </div>
       </div>
 
-      {/* Timer Bar */}
+      {/* 30-Second Timer Bar */}
       <div className="glass-panel p-4 rounded-2xl border-2 border-slate-700/60 light:border-slate-300 shadow-md">
-        <TimerBar timeRemaining={timeRemaining} totalTime={15} color={sdg.color} />
+        <TimerBar timeRemaining={timeRemaining} totalTime={30} color={sdg.color} />
       </div>
 
-      {/* Main Question Card - Monitor & Landscape Scaled */}
+      {/* Main Question Card */}
       <div 
         className="glass-panel p-8 sm:p-12 rounded-3xl border-3 shadow-2xl space-y-8 relative overflow-hidden transition-all"
         style={{ borderColor: `${sdg.color}66` }}
@@ -185,7 +186,7 @@ export const QuizPhase: React.FC<QuizPhaseProps> = ({
           </h3>
         </div>
 
-        {/* Option Choice Buttons - Landscape Grid Optimization */}
+        {/* Option Choice Buttons */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
           {currentQuestion.options.map((opt, idx) => {
             const isSelected = selectedOption === idx;
@@ -248,7 +249,7 @@ export const QuizPhase: React.FC<QuizPhaseProps> = ({
               </span>
             </div>
 
-            {/* Fact Box - Monitor Scaled */}
+            {/* Fact Box */}
             <div className="p-6 rounded-3xl bg-amber-500/10 border-2 border-amber-500/30 text-amber-200 text-base sm:text-xl font-medium space-y-2 shadow-lg">
               <div className="font-black uppercase text-amber-400 text-sm sm:text-base tracking-wider flex items-center space-x-2 font-heading">
                 <Lightbulb className="w-5 h-5 text-amber-400" />
