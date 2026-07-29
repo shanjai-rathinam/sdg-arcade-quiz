@@ -1,6 +1,6 @@
 import React from 'react';
 import type { RoleMode, ThemeMode } from '../types/game';
-import { Sun, Moon, Volume2, VolumeX, Sparkles } from 'lucide-react';
+import { Sun, Moon, Volume2, VolumeX, Sparkles, Wifi, ShieldCheck } from 'lucide-react';
 import { audioService } from '../services/audioService';
 import { SdgWheelLogo } from './SdgWheelLogo';
 
@@ -12,6 +12,7 @@ interface NavbarProps {
   setIsMuted: (muted: boolean) => void;
   onOpenQrModal?: () => void;
   isConnected: boolean;
+  roomCode?: string;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
@@ -20,7 +21,9 @@ export const Navbar: React.FC<NavbarProps> = ({
   setTheme,
   isMuted,
   setIsMuted,
-  onOpenQrModal
+  onOpenQrModal,
+  isConnected,
+  roomCode = 'SDG-1738'
 }) => {
   const toggleAudio = () => {
     const nextMuted = !isMuted;
@@ -36,21 +39,33 @@ export const Navbar: React.FC<NavbarProps> = ({
   return (
     <header className="sticky top-0 z-40 w-full border-b-2 border-slate-800/80 light:border-slate-200 bg-slate-950/90 light:bg-white/95 backdrop-blur-md transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 h-20 sm:h-24 md:h-28 flex items-center justify-between">
-        {/* Transparent UN SDG Wheel Ring Logo & Title - Scaled to Match Footer */}
+        {/* Transparent UN SDG Wheel Ring Logo & Title */}
         <div className="flex items-center space-x-4 sm:space-x-5">
           <SdgWheelLogo className="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 drop-shadow-lg" />
           <div className="flex flex-col">
-            <span className="text-xl sm:text-2xl md:text-3xl font-black tracking-tight text-white light:text-slate-900 leading-tight font-heading drop-shadow-sm">
-              SDG ARCADE QUIZ
-            </span>
-            <span className="text-xs sm:text-sm font-extrabold text-slate-400 light:text-slate-500 flex items-center space-x-1 mt-0.5 uppercase tracking-wider font-heading">
+            <div className="flex items-center space-x-2">
+              <span className="text-xl sm:text-2xl md:text-3xl font-black tracking-tight text-white light:text-slate-900 leading-tight font-heading drop-shadow-sm">
+                SDG ARCADE QUIZ
+              </span>
+              {/* Room Code Badge */}
+              <span className="hidden lg:inline-flex items-center space-x-1 px-2.5 py-0.5 rounded-full bg-amber-500/20 border border-amber-500/40 text-amber-400 font-extrabold text-xs tracking-wider font-heading">
+                <ShieldCheck className="w-3.5 h-3.5" />
+                <span>ROOM: {roomCode}</span>
+              </span>
+            </div>
+            <span className="text-xs sm:text-sm font-extrabold text-slate-400 light:text-slate-500 flex items-center space-x-1.5 mt-0.5 uppercase tracking-wider font-heading">
               <span>UN Sustainable Development Goals</span>
+              {/* Connection Status Indicator */}
+              <span className="inline-flex items-center space-x-1 text-[11px] text-emerald-400 font-mono">
+                <Wifi className="w-3 h-3 text-emerald-400 animate-pulse" />
+                <span className="hidden sm:inline">{isConnected ? 'LIVE SYNC' : 'OFFLINE'}</span>
+              </span>
             </span>
           </div>
         </div>
 
-        {/* Global Controls: Sound & Theme Scaled */}
-        <div className="flex items-center space-x-3 sm:space-x-4">
+        {/* Global Controls: Sound & Theme */}
+        <div className="flex items-center space-x-2 sm:space-x-4">
           {/* QR Join Button for Host Controller ONLY */}
           {role === 'CONTROLLER' && onOpenQrModal && (
             <button
@@ -62,7 +77,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               title="Show Player Join QR Code"
             >
               <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-amber-400" />
-              <span className="hidden sm:inline">Join QR</span>
+              <span className="hidden sm:inline">Join QR ({roomCode})</span>
             </button>
           )}
 

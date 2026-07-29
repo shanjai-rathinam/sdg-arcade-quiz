@@ -9,7 +9,8 @@ import { SummaryPhase } from './SummaryPhase';
 
 interface PlayerViewProps {
   playerState: PlayerState;
-  onNameSubmitted: (name: string) => void;
+  roomCode: string;
+  onNameSubmitted: (name: string, roomCode?: string) => void;
   onFinishSplash: () => void;
   onAnswerSubmitted: (record: AnswerRecord) => void;
   onNextQuestion: () => void;
@@ -18,6 +19,7 @@ interface PlayerViewProps {
 
 export const PlayerView: React.FC<PlayerViewProps> = ({
   playerState,
+  roomCode,
   onNameSubmitted,
   onFinishSplash,
   onAnswerSubmitted,
@@ -28,10 +30,11 @@ export const PlayerView: React.FC<PlayerViewProps> = ({
 
   return (
     <div className="w-full">
-      {/* Step 1: Name Input */}
+      {/* Step 1: Name & Room Code Input */}
       {playerState.phase === 'NAME_INPUT' && (
         <NameInputPhase
           playerName={playerState.playerName}
+          roomCode={roomCode}
           onNameSubmitted={onNameSubmitted}
         />
       )}
@@ -51,7 +54,7 @@ export const PlayerView: React.FC<PlayerViewProps> = ({
         />
       )}
 
-      {/* Step 4: 5-Question Quiz Engine with Fast Facts & 5s Window */}
+      {/* Step 4: 5-Question Quiz Engine */}
       {playerState.phase === 'QUIZ' && currentSdg && (
         <QuizPhase
           sdg={currentSdg}
@@ -64,7 +67,7 @@ export const PlayerView: React.FC<PlayerViewProps> = ({
         />
       )}
 
-      {/* Step 5: Victory Summary (No player triggers) */}
+      {/* Step 5: Victory Summary */}
       {playerState.phase === 'SUMMARY' && (
         <SummaryPhase
           playerState={playerState}

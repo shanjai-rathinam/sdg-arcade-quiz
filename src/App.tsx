@@ -22,6 +22,20 @@ export function App() {
     return 'PLAYER'; // Default to Player Client
   });
 
+  // Room Code: Auto-extracted from URL query ?room=... or default generated for controller
+  const [roomCode, setRoomCode] = useState<string>(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const queryRoom = params.get('room')?.toUpperCase() || params.get('code')?.toUpperCase();
+      if (queryRoom) {
+        return queryRoom;
+      }
+    }
+    // Generate clean 4-digit room code for controller booth
+    const randNum = Math.floor(1000 + Math.random() * 9000);
+    return `SDG-${randNum}`;
+  });
+
   const [theme, setTheme] = useState<ThemeMode>('DARK');
   const [isMuted, setIsMuted] = useState<boolean>(false);
   const [isQrModalOpen, setIsQrModalOpen] = useState<boolean>(false);
@@ -51,12 +65,13 @@ export function App() {
     }
   }, [theme]);
 
-  // Initialize Cross-Device P2P PeerJS connection
+  // Initialize Room & Cross-Device P2P WebRTC Connection
   useEffect(() => {
-    syncService.initCrossDevice(role === 'CONTROLLER');
-  }, [role]);
+    syncService.initRoom(roomCode, role === 'CONTROLLER');
+    setIsConnected(syncService.isConnected);
+  }, [roomCode, role]);
 
-  // Sync state broadcast listener across devices and windows
+  // Sync state broadcast listener across devices and rooms
   useEffect(() => {
     const unsubscribe = syncService.subscribe((payload: SyncPayload) => {
       switch (payload.event) {
@@ -215,7 +230,13 @@ export function App() {
   };
 
   // Player Actions
-  const handleNameSubmitted = (name: string) => {
+  const handleNameSubmitted = (name: string, inputRoom?: string) => {
+    const activeRoom = inputRoom || roomCode;
+    if (activeRoom !== roomCode) {
+      setRoomCode(activeRoom);
+      syncService.initRoom(activeRoom, role === 'CONTROLLER');
+    }
+
     setPlayerState(prev => ({
       ...prev,
       playerName: name,
@@ -279,6 +300,7 @@ export function App() {
           setIsMuted={setIsMuted}
           onOpenQrModal={() => setIsQrModalOpen(true)}
           isConnected={isConnected}
+          roomCode={roomCode}
         />
 
         {/* Main Container */}
@@ -296,6 +318,7 @@ export function App() {
           ) : (
             <PlayerView
               playerState={playerState}
+              roomCode={roomCode}
               onNameSubmitted={handleNameSubmitted}
               onFinishSplash={handleFinishSplash}
               onAnswerSubmitted={handleAnswerSubmitted}
@@ -314,6 +337,7 @@ export function App() {
         <QrModal
           isOpen={isQrModalOpen}
           onClose={() => setIsQrModalOpen(false)}
+          roomCode={roomCode}
         />
       )}
     </div>

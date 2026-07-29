@@ -1,9 +1,7 @@
 import Peer, { type DataConnection } from 'peerjs';
 import type { SyncPayload } from '../types/game';
 
-const CHANNEL_NAME = 'sdg_arcade_quiz_channel';
 const LOCAL_STORAGE_KEY = 'sdg_arcade_quiz_event';
-const HOST_PEER_ID = 'sdg_arcade_quiz_host_v2';
 
 class SyncService {
   private channel: BroadcastChannel | null = null;
@@ -11,28 +9,15 @@ class SyncService {
   private connections: Map<string, DataConnection> = new Map();
   private hostConn: DataConnection | null = null;
   private listeners: Set<(payload: SyncPayload) => void> = new Set();
+  
   public clientId: string;
+  public roomCode: string = 'SDG-1738';
   public isHost: boolean = false;
+  public isConnected: boolean = false;
 
   constructor() {
     this.clientId = 'client_' + Math.random().toString(36).substring(2, 9);
-    this.initBroadcastChannel();
     this.initLocalStorage();
-  }
-
-  private initBroadcastChannel() {
-    if (typeof window !== 'undefined' && 'BroadcastChannel' in window) {
-      try {
-        this.channel = new BroadcastChannel(CHANNEL_NAME);
-        this.channel.onmessage = (event: MessageEvent<SyncPayload>) => {
-          if (event.data && event.data.senderId !== this.clientId) {
-            this.notifyListeners(event.data);
-          }
-        };
-      } catch (e) {
-        console.warn('BroadcastChannel initialization failed', e);
-      }
-    }
   }
 
   private initLocalStorage() {
@@ -52,22 +37,53 @@ class SyncService {
     }
   }
 
-  public initCrossDevice(isHostView: boolean) {
+  public initRoom(roomCode: string, isHostView: boolean) {
+    this.roomCode = roomCode.toUpperCase().trim();
     this.isHost = isHostView;
+
+    const channelName = `sdg_arcade_channel_${this.roomCode}`;
+    const hostPeerId = `sdg_arcade_host_${this.roomCode}`;
+
+    // 1. Initialize BroadcastChannel for same-device local tabs
+    if (typeof window !== 'undefined' && 'BroadcastChannel' in window) {
+      if (this.channel) {
+        try { this.channel.close(); } catch(e) {}
+      }
+      try {
+        this.channel = new BroadcastChannel(channelName);
+        this.channel.onmessage = (event: MessageEvent<SyncPayload>) => {
+          if (event.data && event.data.senderId !== this.clientId) {
+            this.notifyListeners(event.data);
+          }
+        };
+      } catch (e) {
+        console.warn('BroadcastChannel initialization failed', e);
+      }
+    }
+
+    // 2. Initialize PeerJS WebRTC P2P Cloud Connection
     if (typeof window === 'undefined') return;
+
+    // Clean up previous peer connection if room changed
+    if (this.peer) {
+      try { this.peer.destroy(); } catch(e) {}
+      this.peer = null;
+    }
 
     try {
       if (isHostView) {
-        // Register Host Controller Peer
-        this.peer = new Peer(HOST_PEER_ID, { debug: 1 });
+        // Register Host Controller Peer for this Room Code
+        this.peer = new Peer(hostPeerId, { debug: 1 });
 
         this.peer.on('open', (id) => {
-          console.log('[SyncService] Host peer registered cleanly:', id);
+          console.log(`[SyncService] Host Room Controller registered cleanly: ${id}`);
+          this.isConnected = true;
         });
 
         this.peer.on('connection', (conn) => {
-          console.log('[SyncService] Player device connected:', conn.peer);
+          console.log('[SyncService] Remote Player connected to room:', conn.peer);
           this.connections.set(conn.peer, conn);
+          this.isConnected = true;
 
           conn.on('data', (data) => {
             this.handleIncomingData(data);
@@ -77,40 +93,44 @@ class SyncService {
             this.connections.delete(conn.peer);
           });
 
-          // Send immediate sync confirmation
+          // Send immediate room handshake event to confirm connection
           conn.send({ event: 'PLAYER_READY', senderId: this.clientId, timestamp: Date.now() });
         });
 
         this.peer.on('error', (err) => {
-          console.warn('[SyncService] Host peer notice:', err.type);
+          console.warn('[SyncService] Host peer room notice:', err.type, err.message);
         });
       } else {
-        // Register Player Peer & Connect to Host Controller
+        // Register Player Client Peer & Connect to Host Room Peer
         this.peer = new Peer({ debug: 1 });
 
         this.peer.on('open', (id) => {
-          console.log('[SyncService] Player peer opened:', id);
-          this.connectToHost();
+          console.log(`[SyncService] Player peer created (${id}), joining room ${this.roomCode}...`);
+          this.connectToHostRoom(hostPeerId);
         });
 
         this.peer.on('error', (err) => {
-          console.warn('[SyncService] Player peer notice:', err.type);
+          console.warn('[SyncService] Player peer notice:', err.type, err.message);
         });
       }
     } catch (e) {
-      console.warn('[SyncService] Cross-device PeerJS init error:', e);
+      console.warn('[SyncService] PeerJS room init error:', e);
     }
   }
 
-  public connectToHost() {
+  private connectToHostRoom(hostPeerId: string) {
     if (!this.peer || (this.hostConn && this.hostConn.open)) return;
 
     try {
-      const conn = this.peer.connect(HOST_PEER_ID, { reliable: true });
+      const conn = this.peer.connect(hostPeerId, { reliable: true });
       this.hostConn = conn;
 
       conn.on('open', () => {
-        console.log('[SyncService] Connected to Host Controller peer successfully!');
+        console.log(`[SyncService] Successfully connected to Host Room (${hostPeerId})!`);
+        this.isConnected = true;
+        
+        // Notify host that player has joined room
+        conn.send({ event: 'PLAYER_READY', senderId: this.clientId, timestamp: Date.now() });
       });
 
       conn.on('data', (data) => {
@@ -119,15 +139,16 @@ class SyncService {
 
       conn.on('close', () => {
         this.hostConn = null;
-        // Retry connection automatically
-        setTimeout(() => this.connectToHost(), 2000);
+        this.isConnected = false;
+        // Retry connection to host
+        setTimeout(() => this.connectToHostRoom(hostPeerId), 2000);
       });
 
       conn.on('error', (err) => {
-        console.warn('[SyncService] Connection to host error:', err);
+        console.warn('[SyncService] Room connection error:', err);
       });
     } catch (e) {
-      console.warn('[SyncService] Connect to host failed:', e);
+      console.warn('[SyncService] Failed to connect to host room:', e);
     }
   }
 
@@ -158,9 +179,9 @@ class SyncService {
       }
     }
 
-    // 2. PeerJS WebRTC P2P DataChannel (Cross-Device over Internet/WiFi)
+    // 2. WebRTC P2P DataChannel across Internet/WiFi
     if (this.isHost) {
-      // Send to all connected players
+      // Broadcast to all connected remote player peers
       this.connections.forEach((conn) => {
         if (conn.open) {
           try {
@@ -171,7 +192,7 @@ class SyncService {
         }
       });
     } else if (this.hostConn && this.hostConn.open) {
-      // Send from player to host controller
+      // Send from player client to host controller
       try {
         this.hostConn.send(fullPayload);
       } catch (e) {
