@@ -51,7 +51,12 @@ export function App() {
     }
   }, [theme]);
 
-  // Sync state broadcast listener across windows/tabs
+  // Initialize Cross-Device P2P PeerJS connection
+  useEffect(() => {
+    syncService.initCrossDevice(role === 'CONTROLLER');
+  }, [role]);
+
+  // Sync state broadcast listener across devices and windows
   useEffect(() => {
     const unsubscribe = syncService.subscribe((payload: SyncPayload) => {
       switch (payload.event) {
